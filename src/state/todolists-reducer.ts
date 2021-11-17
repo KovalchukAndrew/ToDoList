@@ -102,3 +102,10 @@ export const setTodosTC = () => (dispatch: Dispatch, getState: () => AppRootStat
         })
 }
 
+export const removeTodoListTC = (todolistId: string) => (dispatch: Dispatch) => {
+    todolistsAPI.deleteTodolist(todolistId)
+        .then(() => {
+            dispatch(removeTodolistAC(todolistId))
+        })
+}
+

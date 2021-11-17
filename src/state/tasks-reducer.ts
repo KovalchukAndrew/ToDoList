@@ -1,8 +1,9 @@
 import {TasksStateType} from '../App';
 import {v1} from 'uuid';
 import {AddTodolistActionType, RemoveTodolistActionType, SetTodoListActionType} from './todolists-reducer';
-import {TaskPriorities, TaskStatuses, TaskType, todolistsAPI} from '../api/todolists-api'
+import {TaskPriorities, TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelType} from '../api/todolists-api'
 import {Dispatch} from "redux";
+import {AppRootStateType} from "./store";
 
 export type RemoveTaskActionType = {
     type: 'REMOVE-TASK',
@@ -157,6 +158,17 @@ export const addTaskTC = (todolistId: string, title: string) => {
         todolistsAPI.createTask(todolistId, title)
             .then((res) => {
                 dispatch(addTaskAC(res.data.data.item))
+            })
+    }
+}
+
+export const updateTaskStatusTC = (taskId: string, status: TaskStatuses, todolistId: string) => {
+    return (dispatch: Dispatch, getState: () => AppRootStateType) => {
+        let currentTask = getState().tasks[todolistId].find(t => t.id ===taskId)
+        let updatedTask = {...currentTask, status} as UpdateTaskModelType
+        todolistsAPI.updateTask(todolistId, taskId, updatedTask)
+            .then(() => {
+                dispatch(changeTaskStatusAC(taskId, status, todolistId))
             })
     }
 }
