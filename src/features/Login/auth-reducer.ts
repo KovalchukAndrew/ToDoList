@@ -5,7 +5,8 @@ import {handleServerAppError, handleServerNetworkError} from "../../utils/error-
 
 
 const initialState = {
-    isLoggedIn: false
+    isLoggedIn: false,
+
 }
 type InitialStateType = typeof initialState
 
@@ -22,15 +23,6 @@ export const setIsLoggedInAC = (value: boolean) =>
     ({type: 'login/SET-IS-LOGGED-IN', value} as const)
 
 // thunks
-export const initializeAppTC = () => (dispatch: Dispatch) => {
-    authAPI.me().then(res => {
-        debugger
-        if (res.data.resultCode === 0) {
-            dispatch(setIsLoggedInAC(true));
-        } else {
-        }
-    })
-}
 
 export const loginTC = (data: LoginParamsType) => (dispatch: Dispatch<ActionsType>) => {
     dispatch(setAppStatusAC('loading'))
@@ -51,6 +43,22 @@ export const loginTC = (data: LoginParamsType) => (dispatch: Dispatch<ActionsTyp
             handleServerNetworkError(error, dispatch)
         })
 }
+export const logoutTC = () => (dispatch: Dispatch<ActionsType>) => {
+    dispatch(setAppStatusAC('loading'))
+    authAPI.logout()
+        .then(res => {
+            if (res.data.resultCode === 0) {
+                dispatch(setIsLoggedInAC(false))
+                dispatch(setAppStatusAC('succeeded'))
+            } else {
+                handleServerAppError(res.data, dispatch)
+            }
+        })
+        .catch((error) => {
+            handleServerNetworkError(error, dispatch)
+        })
+}
+
 
 // types
 type ActionsType = ReturnType<typeof setIsLoggedInAC> | SetAppStatusActionType | SetAppErrorActionType

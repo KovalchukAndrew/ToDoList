@@ -12,22 +12,33 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import { Menu } from '@mui/icons-material';
-import {LinearProgress} from "@mui/material";
+import {CircularProgress, LinearProgress} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./store";
-import {RequestStatusType} from "./app-reducer";
+import {initializeAppTC, RequestStatusType} from "./app-reducer";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
 import {Navigate, Route, Routes} from "react-router-dom";
 import {Login} from "../features/Login/Login";
-import {initializeAppTC} from "../features/Login/auth-reducer";
+import {logoutTC} from "../features/Login/auth-reducer";
+
 
 
 function App() {
     const dispatch = useDispatch()
+    let status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
+    let isInitialized = useSelector<AppRootStateType, boolean>(state => state.app.isInitialized)
+    let isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
+
     useEffect(() => {
         dispatch(initializeAppTC())
     }, [])
-    let status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
+
+    if (!isInitialized) {
+        return <div
+            style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+            <CircularProgress/>
+        </div>
+    }
 
     return (
         <div className="App">
@@ -41,6 +52,7 @@ function App() {
                         News
                     </Typography>
                     <Button color="inherit">Login</Button>
+                    {isLoggedIn && <Button color="inherit" onClick={() => dispatch(logoutTC())}>Log out</Button>}
                 </Toolbar>
                 {status === 'loading' && <LinearProgress color="secondary"/>}
             </AppBar>
