@@ -3,10 +3,8 @@ import {setAppErrorAC, SetAppErrorActionType, setAppStatusAC, SetAppStatusAction
 import {authAPI, LoginParamsType, todolistsAPI} from "../../api/todolists-api";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 
-
 const initialState = {
     isLoggedIn: false,
-
 }
 type InitialStateType = typeof initialState
 
@@ -22,7 +20,6 @@ export const authReducer = (state: InitialStateType = initialState, action: Acti
 export const setIsLoggedInAC = (value: boolean) =>
     ({type: 'login/SET-IS-LOGGED-IN', value} as const)
 
-// thunks
 
 export const loginTC = (data: LoginParamsType) => (dispatch: Dispatch<ActionsType>) => {
     dispatch(setAppStatusAC('loading'))
