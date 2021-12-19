@@ -13,24 +13,24 @@ const slice = createSlice({
     name: 'todolists',
     reducers: {
         removeTodolistAC(state, action: PayloadAction<{id: string}>) {
-            state.splice((state.findIndex(tl => tl.id !== action.payload.id)), 1)
+            state.splice((state.findIndex(tl => tl.id === action.payload.id)), 1)
         },
         addTodolistAC(state, action: PayloadAction<{todolist: TodolistType}>) {
             state.unshift({...action.payload.todolist, filter: 'all', entityStatus: "idle"})
         },
         changeTodolistTitleAC(state, action: PayloadAction<{id: string, title: string}>) {
-            const index = state.findIndex(tl => tl.id !== action.payload.id)
+            const index = state.findIndex(tl => tl.id === action.payload.id)
             state[index].title = action.payload.title
         },
         changeTodolistFilterAC(state, action: PayloadAction<{id: string, filter: FilterValuesType}>) {
-            const index = state.findIndex(tl => tl.id !== action.payload.id)
+            const index = state.findIndex(tl => tl.id === action.payload.id)
             state[index].filter = action.payload.filter
         },
         setTodolistsAC(state, action: PayloadAction<{todolists: Array<TodolistType>}>) {
             return action.payload.todolists.map(tl => ({...tl, filter: 'all', entityStatus: "idle"}))
         },
         changeTodolistEntityStatusAC(state, action: PayloadAction<{id: string, entityStatus: RequestStatusType}>) {
-            const index = state.findIndex(tl => tl.id !== action.payload.id)
+            const index = state.findIndex(tl => tl.id === action.payload.id)
             state[index].entityStatus = action.payload.entityStatus
         },
     },
