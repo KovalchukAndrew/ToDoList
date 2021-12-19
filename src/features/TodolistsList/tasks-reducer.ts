@@ -1,9 +1,8 @@
 import {
     addTodolistAC,
-    AddTodolistActionType, changeTodolistEntityStatusAC,
-    ChangeTodolistEntityStatusActionType, removeTodolistAC,
-    RemoveTodolistActionType, setTodolistsAC,
-    SetTodolistsActionType
+    changeTodolistEntityStatusAC,
+    removeTodolistAC,
+    setTodolistsAC,
 } from './todolists-reducer'
 import {TaskPriorities, TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelType} from '../../api/todolists-api'
 import {Dispatch} from 'redux'
